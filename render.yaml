@@ -13,7 +13,7 @@ services:
       - key: BACKEND_URL
         value: http://affidavit-backend:8000
       - key: MONGO_URL
-        fromSecret: MONGO_URL_SECRET
+        sync: false
 
   #-----------------#
   # Backend Service #
@@ -28,4 +28,4 @@ services:
     healthCheckPath: /
     envVars:
       - key: OPENROUTER_API_KEY
-        fromSecret: OPENROUTER_API_KEY_SECRET
+        sync: false
