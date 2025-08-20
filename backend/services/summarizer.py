@@ -2,6 +2,10 @@ import os
 from langchain.chains.summarize import load_summarize_chain
 from langchain_openai import ChatOpenAI
 from langchain_community.vectorstores import FAISS
+from dotenv import load_dotenv
+from pathlib import Path
+dotenv_path = Path(__file__).resolve().parents[1] / ".env"
+load_dotenv(dotenv_path=dotenv_path)
 
 def get_summary_from_llm(vector_store: FAISS):
     if not vector_store:
@@ -12,7 +16,7 @@ def get_summary_from_llm(vector_store: FAISS):
         llm = ChatOpenAI(
             model="meta-llama/llama-3-8b-instruct",
             temperature=0.1,
-            openai_api_key=os.getenv("OPENROUTER_API_KEY"),
+            openai_api_key = os.getenv("OPENROUTER_API_KEY"),
             openai_api_base="https://openrouter.ai/api/v1",
             default_headers={
                 "HTTP-Referer": "https://localhost:3000",

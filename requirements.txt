@@ -7,3 +7,5 @@ faiss-cpu==1.7.4
 pypdf
 python-docx
 python-dotenv
+doc2text
+langchain-openai
