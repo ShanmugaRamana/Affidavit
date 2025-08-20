@@ -76,7 +76,8 @@ async function startServer() {
             
             const form = new FormData();
             form.append('file', req.file.buffer, { filename: req.file.originalname });
-            const response = await axios.post('http://localhost:8000/summarize/', form, { headers: form.getHeaders() });
+            const backendUrl = process.env.BACKEND_URL;
+            const response = await axios.post(`${backendUrl}/summarize/`, form, { headers: form.getHeaders() });
             const summaryData = response.data;
 
             const newAnalysis = new Analysis({

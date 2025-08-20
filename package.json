@@ -19,5 +19,8 @@
     "mongodb": "^6.18.0",
     "mongoose": "^8.17.2",
     "multer": "^2.0.2"
+  },
+  "engines": {
+    "node": "20.x"
   }
 }
