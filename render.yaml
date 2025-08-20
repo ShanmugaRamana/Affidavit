@@ -1,5 +1,3 @@
-# /render.yaml
-
 services:
   #-----------------#
   # Frontend Service #
@@ -9,6 +7,7 @@ services:
     env: node
     plan: free
     rootDir: ./
+    # FIX: Correct indentation
     build_command: npm install
     start_command: node server.js
     envVars:
@@ -25,6 +24,7 @@ services:
     env: python
     plan: free
     rootDir: ./backend
+    # FIX: Correct indentation
     build_command: pip install -r requirements.txt
     start_command: uvicorn main:app --host 0.0.0.0 --port 8000
     healthCheckPath: /
