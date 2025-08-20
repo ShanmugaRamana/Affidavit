@@ -7,23 +7,15 @@ services:
   - type: web
     name: affidavit-frontend
     env: node
-    plan: free # Or your preferred plan
-    # Tell Render where the service's root is
+    plan: free
     rootDir: ./
-    # Commands to build the service
     build_command: npm install
-    # Command to start the service
     start_command: node server.js
-    # Environment variables for this service
     envVars:
       - key: BACKEND_URL
-        # This special value automatically points to our backend service
         value: http://affidavit-backend:8000
       - key: MONGO_URL
-        # Pulls the value from a secret key you'll create in the Render dashboard
         fromSecret: MONGO_URL_SECRET
-      - key: GOOGLE_DRIVE_FOLDER_ID
-        fromSecret: GOOGLE_DRIVE_FOLDER_ID_SECRET
 
   #-----------------#
   # Backend Service #
@@ -34,7 +26,6 @@ services:
     plan: free
     rootDir: ./backend
     build_command: pip install -r requirements.txt
-    # Render requires services to bind to 0.0.0.0 on a specific port
     start_command: uvicorn main:app --host 0.0.0.0 --port 8000
     healthCheckPath: /
     envVars:
