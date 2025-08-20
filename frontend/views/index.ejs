@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affidavit AI</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { box-sizing: border-box; }
+        body, h1, ul, li, p { margin: 0; padding: 0; }
+        body { font-family: 'Montserrat', sans-serif; background-color: #f8f9fa; color: #343a40; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background-color: #ffffff; border-bottom: 1px solid #dee2e6; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .brand { font-size: 1.8em; font-weight: 700; color: #212529; }
+        .nav-links { margin-left: 70px; display: flex; list-style: none; gap: 25px; }
+        .nav-links a { text-decoration: none; color: #495057; font-size: 1em; font-weight: 500; cursor: pointer; transition: color 0.3s ease; }
+        .nav-links a:hover { color: rgb(68, 133, 255); }
+        .action-buttons { display: flex; gap: 10px; }
+        .btn { padding: 10px 18px; border-radius: 7px; text-decoration: none; font-weight: 500; font-size: 0.95em; text-align: center; cursor: pointer; border: none; transition: all 0.3s ease; }
+        .btn-login { background-color: transparent; color: #495057; border: 1px solid transparent; }
+        .btn-login:hover { color: rgb(68, 133, 255); }
+        .btn-get-started { background-color: rgb(68, 133, 255); color: #ffffff; border: 1px solid rgb(68, 133, 255); }
+        .btn-get-started:hover { background-color: rgb(58, 123, 245); transform: translateY(-1px); }
+        .main-content { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px; min-height: calc(100vh - 80px); }
+        .main-content h1 { font-size: 2.5em; font-weight: 700; margin-bottom: 50px; text-align: center; max-width: 800px; line-height: 1.2; }
+        .upload-container { width: 100%; max-width: 600px; display: flex; flex-direction: column; align-items: center; }
+        #upload-form { width: 100%; text-align: center; }
+        .upload-area { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; border: 2px dashed rgb(68, 133, 255); border-radius: 12px; padding: 50px 40px; background-color: #ffffff; cursor: pointer; transition: all 0.3s ease; text-align: center; }
+        .upload-area:hover { background-color: #f0f7ff; border-color: rgb(58, 123, 245); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(68, 133, 255, 0.1); }
+        .upload-area p { margin: 0; font-size: 1.2em; color: #495057; line-height: 1.4; }
+        .upload-area span { display: block; font-size: 0.9em; color: #6c757d; margin-top: 12px; }
+        #file-input { display: none; }
+        #file-name-display { margin-top: 20px; font-weight: 500; color: #28a745; padding: 10px; background-color: #d4edda; border-radius: 8px; border: 1px solid #c3e6cb; display: none; }
+        .btn-analyze { background-color: rgb(68, 133, 255); color: #ffffff; border: none; padding: 15px 30px; font-size: 1.1em; font-family: 'Montserrat', sans-serif; font-weight: 500; border-radius: 8px; cursor: pointer; margin-top: 20px; transition: all 0.3s; }
+        .btn-analyze:hover { background-color: rgb(58, 123, 245); }
+        .btn-analyze:disabled { background-color: #a9c7ff; cursor: not-allowed; }
+
+        /* Loading Overlay Styles */
+        #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; flex-direction: column; z-index: 1000; }
+        #loading-overlay.show { display: flex; }
+        #loading-overlay p { margin-top: 20px; font-size: 1.2em; font-weight: 500; color: #333; }
+        .spinner { width: 60px; height: 60px; border: 7px solid #f3f3f3; border-top: 7px solid rgb(68, 133, 255); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header { flex-direction: column; gap: 15px; padding: 20px; }
+            .nav-links { margin-left: 0px; gap: 15px; flex-wrap: wrap; justify-content: center; }
+            .main-content h1 { font-size: 2em; }
+            .upload-area { padding: 40px 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="brand">Affidavit</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a id="home">Home</a></li>
+                <li><a id="use-cases">Use Cases</a></li>
+                <li><a id="resources">Resources</a></li>
+                <li><a id="security">Security</a></li>
+                <li><a id="about-us">About Us</a></li>
+            </ul>
+        </nav>
+        <div class="action-buttons">
+            <a id="login" class="btn btn-login">Login</a>
+            <a id="get-started" class="btn btn-get-started">Get Started</a>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <h1>Demystify Your Legal Documents Instantly</h1>
+        <div class="upload-container">
+            <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
+                <label for="file-input" class="upload-area">
+                    <p><strong>Drag & Drop</strong> your file here or <strong>Click to Browse</strong></p>
+                    <span>Supports: PDF, DOC, DOCX</span>
+                </label>
+                <input type="file" id="file-input" name="document" accept=".pdf,.doc,.docx" required>
+                <div id="file-name-display"></div>
+                <button type="submit" class="btn-analyze" disabled>Analyze Document</button>
+            </form>
+        </div>
+    </main>
+
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <p>Analyzing your document, please wait...</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const uploadForm = document.getElementById('upload-form');
+            const fileInput = document.getElementById('file-input');
+            const uploadArea = document.querySelector('.upload-area');
+            const fileNameDisplay = document.getElementById('file-name-display');
+            const submitButton = document.querySelector('.btn-analyze');
+            const loadingOverlay = document.getElementById('loading-overlay'); // Get the overlay
+
+            const handleFileSelection = (file) => {
+                if (file) {
+                    fileNameDisplay.textContent = `Selected: ${file.name}`;
+                    fileNameDisplay.style.display = 'block';
+                    submitButton.disabled = false;
+                } else {
+                    fileNameDisplay.style.display = 'none';
+                    submitButton.disabled = true;
+                }
+            };
+
+            fileInput.addEventListener('change', () => {
+                handleFileSelection(fileInput.files[0]);
+            });
+
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.style.backgroundColor = '#f0f7ff';
+            });
+
+            uploadArea.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                uploadArea.style.backgroundColor = '#ffffff';
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.style.backgroundColor = '#ffffff';
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    fileInput.files = files;
+                    handleFileSelection(files[0]);
+                }
+            });
+
+            // Handle the form submission process
+            uploadForm.addEventListener('submit', () => {
+                if (fileInput.files.length > 0) {
+                    // Show the loading screen
+                    loadingOverlay.classList.add('show');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

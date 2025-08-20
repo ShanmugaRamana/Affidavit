@@ -1,0 +1,16 @@
+# Node.js
+/node_modules
+.env
+npm-debug.log
+/temp-uploads
+
+# Python
+/venv
+__pycache__/
+*.pyc
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+package-lock.json

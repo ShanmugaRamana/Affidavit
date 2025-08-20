@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Affidavit AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body, h1, ul, li, p { margin: 0; padding: 0; }
+        body { font-family: 'Montserrat', sans-serif; background-color: #f8f9fa; color: #343a40; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background-color: #ffffff; border-bottom: 1px solid #dee2e6; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .brand { font-size: 1.8em; font-weight: 700; color: #212529; }
+        .nav-links { margin-left: 70px; display: flex; list-style: none; gap: 25px; }
+        .nav-links a { text-decoration: none; color: #495057; font-size: 1em; font-weight: 500; cursor: pointer; }
+        .action-buttons { display: flex; gap: 10px; }
+        .btn { padding: 10px 18px; border-radius: 7px; text-decoration: none; font-weight: 500; font-size: 0.95em; text-align: center; cursor: pointer; border: none; }
+        .btn-login { background-color: transparent; color: #495057; }
+        .btn-get-started { background-color: rgb(68, 133, 255); color: #ffffff; }
+        .dashboard-container { display: grid; grid-template-columns: 1fr 1fr; padding: 40px; gap: 40px; align-items: start; }
+        .left-panel, .right-panel { background: #fff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.07); padding: 30px; }
+        .right-panel { color: #6c757d; text-align: center; padding: 60px 30px; }
+        .document-section, .summary-section { margin-bottom: 30px; }
+        h2 { margin-top: 0; font-size: 1.8em; color: #212529; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px;}
+        .document-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .document-name { font-weight: 500; color: #495057; background-color: #e9ecef; padding: 10px 15px; border-radius: 6px; }
+        .view-file-btn { background-color: rgb(68, 133, 255); color: #ffffff; border: none; padding: 12px 24px; font-size: 1em; font-weight: 500; border-radius: 8px; cursor: pointer; text-decoration: none; display: inline-block; white-space: nowrap; }
+        .view-file-btn:hover { background-color: rgb(58, 123, 245); }
+        .summary-content { font-size: 1.1em; line-height: 1.7; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="brand">Affidavit</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a id="home">Home</a></li>
+                <li><a id="use-cases">Use Cases</a></li>
+                <li><a id="resources">Resources</a></li>
+                <li><a id="security">Security</a></li>
+                <li><a id="about-us">About Us</a></li>
+            </ul>
+        </nav>
+        <div class="action-buttons">
+            <a id="login" class="btn btn-login">Login</a>
+            <a id="get-started" class="btn btn-get-started">Get Started</a>
+        </div>
+    </header>
+
+    <main class="dashboard-container">
+        <div class="left-panel">
+            <div class="document-section">
+                <h2>Original Document</h2>
+                <div class="document-info">
+                    <div class="document-name"><%= fileName %></div>
+                    
+                    <% if (fileMimeType === 'application/pdf') { %>
+                        <a href="/file/<%= fileId %>" target="_blank" class="view-file-btn">
+                            View PDF
+                        </a>
+                    <% } else { %>
+                        <% const docUrl = `${serverAddress}/file/${fileId}` %>
+                        <a href="https://docs.google.com/gview?url=<%= docUrl %>&embedded=true" target="_blank" class="view-file-btn">
+                            View with Google Docs
+                        </a>
+                    <% } %>
+                </div>
+            </div>
+            <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+            <div class="summary-section">
+                <h2>AI Generated Summary</h2>
+                <p class="summary-content"><%= summary %></p>
+            </div>
+        </div>
+        <div class="right-panel">
+            <h2>Additional Tools</h2>
+            <p>Further functionalities will be added here soon.</p>
+        </div>
+    </main>
+</body>
+</html>
