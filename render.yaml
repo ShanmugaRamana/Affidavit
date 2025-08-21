@@ -21,6 +21,7 @@ services:
   - type: web
     name: affidavit-backend
     env: python
+    runtime: python-3.11.9
     plan: free
     rootDir: ./
     buildCommand: |
