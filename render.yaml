@@ -20,7 +20,7 @@ services:
   #-----------------#
   - type: web
     name: affidavit-backend
-    env: docker
+    env: DockerFile
     plan: free
     rootDir: ./
     envVars:
