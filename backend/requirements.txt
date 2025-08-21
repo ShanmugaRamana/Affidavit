@@ -8,6 +8,6 @@ pypdf
 python-docx
 python-dotenv
 doc2text
-uvivorn
+uvicorn
 langchain-openai==0.1.25
 langchain-text-splitters
