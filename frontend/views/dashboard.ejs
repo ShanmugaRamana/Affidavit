@@ -7,10 +7,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docx-preview@0.1.15/dist/docx-preview.js"></script>
+
     <style>
-        * { box-sizing: border-box; }
-        body, h1, ul, li, p { margin: 0; padding: 0; }
-        body { font-family: 'Montserrat', sans-serif; background-color: #f8f9fa; color: #343a40; }
+        body { font-family: 'Montserrat', sans-serif; background-color: #f8f9fa; color: #343a40; margin: 0; }
         .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background-color: #ffffff; border-bottom: 1px solid #dee2e6; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .brand { font-size: 1.8em; font-weight: 700; color: #212529; }
         .nav-links { margin-left: 70px; display: flex; list-style: none; gap: 25px; }
@@ -29,9 +30,19 @@
         .view-file-btn { background-color: rgb(68, 133, 255); color: #ffffff; border: none; padding: 12px 24px; font-size: 1em; font-weight: 500; border-radius: 8px; cursor: pointer; text-decoration: none; display: inline-block; white-space: nowrap; }
         .view-file-btn:hover { background-color: rgb(58, 123, 245); }
         .summary-content { font-size: 1.1em; line-height: 1.7; white-space: pre-wrap; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-overlay.show { display: flex; }
+        .modal-content { background: #fff; padding: 20px; border-radius: 10px; width: 80%; height: 90%; display: flex; flex-direction: column; position: relative; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
+        .modal-title { font-size: 1.5em; font-weight: 500; }
+        .close-button { font-size: 2.5em; font-weight: bold; color: #aaa; cursor: pointer; line-height: 1; }
+        .close-button:hover { color: #333; }
+        .modal-body { flex-grow: 1; overflow-y: auto; }
+        .modal-body embed { width: 100%; height: 100%; }
     </style>
 </head>
 <body>
+
     <header class="header">
         <div class="brand">Affidavit</div>
         <nav>
@@ -55,17 +66,7 @@
                 <h2>Original Document</h2>
                 <div class="document-info">
                     <div class="document-name"><%= fileName %></div>
-                    
-                    <% if (fileMimeType === 'application/pdf') { %>
-                        <a href="/file/<%= fileId %>" target="_blank" class="view-file-btn">
-                            View PDF
-                        </a>
-                    <% } else { %>
-                        <% const docUrl = `${serverAddress}/file/${fileId}` %>
-                        <a href="https://docs.google.com/gview?url=<%= docUrl %>&embedded=true" target="_blank" class="view-file-btn">
-                            View with Google Docs
-                        </a>
-                    <% } %>
+                    <button id="view-file-btn" class="view-file-btn">View File</button>
                 </div>
             </div>
             <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
@@ -79,5 +80,67 @@
             <p>Further functionalities will be added here soon.</p>
         </div>
     </main>
+
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title" class="modal-title"><%= fileName %></h3>
+                <span id="close-button" class="close-button">&times;</span>
+            </div>
+            <div id="modal-body" class="modal-body"></div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const viewButton = document.getElementById('view-file-btn');
+            const modalOverlay = document.getElementById('modal-overlay');
+            const modalBody = document.getElementById('modal-body');
+            const closeButton = document.getElementById('close-button');
+            const fileUrl = '/file/<%= fileId %>';
+            const mimeType = '<%= fileMimeType %>';
+            let isFileRendered = false;
+
+            const openModal = () => {
+                modalOverlay.classList.add('show');
+                if (isFileRendered) return;
+                modalBody.innerHTML = '<p>Loading document...</p>';
+                if (mimeType === 'application/pdf') {
+                    const embed = document.createElement('embed');
+                    embed.src = fileUrl;
+                    embed.type = 'application/pdf';
+                    modalBody.innerHTML = '';
+                    modalBody.appendChild(embed);
+                    isFileRendered = true;
+                } else if (mimeType.includes('officedocument')) {
+                    fetch(fileUrl)
+                        .then(response => response.blob())
+                        .then(blob => {
+                            modalBody.innerHTML = '';
+                            docx.renderAsync(blob, modalBody)
+                                .then(() => {
+                                    isFileRendered = true;
+                                    console.log("DOCX rendered successfully.");
+                                });
+                        });
+                } else {
+                    modalBody.innerHTML = '<p>Preview not available for this file type.</p>';
+                    isFileRendered = true;
+                }
+            };
+
+            const closeModal = () => {
+                modalOverlay.classList.remove('show');
+            };
+
+            viewButton.addEventListener('click', openModal);
+            closeButton.addEventListener('click', closeModal);
+            modalOverlay.addEventListener('click', (event) => {
+                if (event.target === modalOverlay) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
 </body>
 </html>

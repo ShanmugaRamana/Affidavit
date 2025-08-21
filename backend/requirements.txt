@@ -1,5 +1,4 @@
 fastapi[all]
-python-multipart
 langchain==0.1.9
 langchain-community
 sentence-transformers==2.5.1
@@ -8,4 +7,6 @@ pypdf
 python-docx
 python-dotenv
 doc2text
+uvivorn
 langchain-openai
+langchain-text-splitters

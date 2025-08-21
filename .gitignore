@@ -1,11 +1,11 @@
 # Node.js
-/node_modules
+node_modules
 .env
 npm-debug.log
 /temp-uploads
 
 # Python
-/venv
+venv
 __pycache__/
 *.pyc
 
