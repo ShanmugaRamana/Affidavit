@@ -12,20 +12,19 @@ services:
     envVars:
       - key: BACKEND_URL
         value: http://affidavit-backend:8000
-      # FIX: Define only the key for the secret
       - key: MONGO_URL
-      - sync: false
+        sync: false
 
   #-----------------#
   # Backend Service #
   #-----------------#
   - type: web
     name: affidavit-backend
-    env: docker
+    env: python
     plan: free
+    rootDir: ./
     dockerfilePath: ./backend/Dockerfile
     healthCheckPath: /
     envVars:
-      # FIX: Define only the key for the secret
       - key: OPENROUTER_API_KEY
-      - sync: false
+        sync: false
