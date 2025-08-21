@@ -1,12 +1,13 @@
 fastapi[all]
-langchain==0.1.9
-langchain-community
+langchain==0.2.16
+langchain-community==0.2.16
+langchain-core==0.2.38
 sentence-transformers==2.5.1
-faiss-cpu==1.7.4
+faiss-cpu>=1.8.0
 pypdf
 python-docx
 python-dotenv
 doc2text
 uvivorn
-langchain-openai
+langchain-openai==0.1.25
 langchain-text-splitters
