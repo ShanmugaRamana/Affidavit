@@ -14,6 +14,7 @@ services:
         value: http://affidavit-backend:8000
       # FIX: Define only the key for the secret
       - key: MONGO_URL
+      - sync: true
 
   #-----------------#
   # Backend Service #
@@ -27,3 +28,4 @@ services:
     envVars:
       # FIX: Define only the key for the secret
       - key: OPENROUTER_API_KEY
+      - sync: true
