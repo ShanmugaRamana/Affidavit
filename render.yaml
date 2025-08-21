@@ -7,8 +7,8 @@ services:
     env: node
     plan: free
     rootDir: ./
-    build_command: npm install
-    start_command: node server.js
+    buildCommand: npm install
+    startCommand: node server.js
     envVars:
       - key: BACKEND_URL
         value: http://affidavit-backend:8000
