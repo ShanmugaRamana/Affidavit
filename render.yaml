@@ -3,7 +3,7 @@ services:
   # Frontend Service #
   #-----------------#
   - type: web
-    name: affidavit-frontend
+    name: affidavitai
     env: node
     plan: free
     rootDir: ./

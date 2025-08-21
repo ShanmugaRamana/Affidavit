@@ -3,7 +3,8 @@ python-multipart
 langchain==0.1.9
 langchain-community
 sentence-transformers==2.5.1
-scann
+numpy
+scann==1.3.2
 pypdf
 python-docx
 python-dotenv
