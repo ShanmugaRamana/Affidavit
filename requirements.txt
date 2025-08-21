@@ -3,7 +3,7 @@ python-multipart
 langchain==0.1.9
 langchain-community
 sentence-transformers==2.5.1
-chromadb
+faiss-cpu==1.7.4
 pypdf
 python-docx
 python-dotenv
