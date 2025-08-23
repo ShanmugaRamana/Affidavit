@@ -1,6 +1,3 @@
-# backend/services/document_processor.py
-
-# UPDATED IMPORTS: Switched from 'langchain' to 'langchain_community'
 from langchain_community.document_loaders import PyPDFLoader, Docx2txtLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 

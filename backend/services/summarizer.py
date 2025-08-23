@@ -1,4 +1,3 @@
-# /backend/services/summarizer.py
 import os
 from langchain.chains.summarize import load_summarize_chain
 from langchain_openai import ChatOpenAI
@@ -13,7 +12,7 @@ load_dotenv(dotenv_path=dotenv_path)
 def get_summary_from_llm(vector_store: FAISS):
     if not vector_store:
         return None
-    
+        
     try:
         llm = ChatOpenAI(
             model="meta-llama/llama-3-8b-instruct",

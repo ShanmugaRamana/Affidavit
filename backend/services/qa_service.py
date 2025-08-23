@@ -1,4 +1,3 @@
-# /backend/services/qa_service.py
 import os
 from langchain.chains import RetrievalQA
 from langchain_openai import ChatOpenAI
@@ -16,11 +15,11 @@ def get_answer(vector_store: FAISS, query: str) -> str:
     """
     if not vector_store:
         return "Error: Document not found or session has expired."
-
+    
     try:
         llm = ChatOpenAI(
             model="meta-llama/llama-3-8b-instruct",
-            temperature=0.2,  # A little more creative for chat
+            temperature=0.2,  
             openai_api_key=os.getenv("OPENROUTER_API_KEY"),
             openai_api_base="https://openrouter.ai/api/v1",
             default_headers={
@@ -51,7 +50,7 @@ def get_answer(vector_store: FAISS, query: str) -> str:
             return_source_documents=False,  
             chain_type_kwargs={"prompt": QA_CHAIN_PROMPT} 
         )
-
+                                                        
         result = qa_chain({"query": query})
         return result.get("result", "Sorry, I couldn't find an answer to that.")
         

@@ -1,4 +1,3 @@
-// /models/Analysis.js
 const mongoose = require('mongoose');
 
 const analysisSchema = new mongoose.Schema({
@@ -11,7 +10,7 @@ const analysisSchema = new mongoose.Schema({
         required: true
     },
     gridFsId: {
-        type: mongoose.Schema.Types.ObjectId, // Links to the file in GridFS
+        type: mongoose.Schema.Types.ObjectId, 
         required: true
     },
     createdAt: {

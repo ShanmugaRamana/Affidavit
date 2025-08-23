@@ -67,7 +67,7 @@ async function startServer() {
                 fileId: newAnalysis.gridFsId,
                 fileMimeType: req.file.mimetype,
                 fileName: req.file.originalname,
-                sessionId: summaryData.sessionId // <-- This line is added
+                sessionId: summaryData.sessionId 
             });
         } catch (error) {
             console.error('Error during analysis:', error.response ? error.response.data : error.message);
