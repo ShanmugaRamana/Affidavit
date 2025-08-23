@@ -9,7 +9,6 @@ const { ObjectId } = require('mongodb');
 const { connectToDb } = require('./config/db.js');
 const Analysis = require('./models/Analysis.js');
 
-// --- Express App Setup ---
 dotenv.config();
 const app = express();
 app.set('views', path.join(__dirname, 'views'));
@@ -20,7 +19,6 @@ const upload = multer({ storage: multer.memoryStorage() });
 async function startServer() {
     const { bucket } = await connectToDb();
 
-    // --- Routes ---
     app.get('/', (req, res) => res.render('index'));
 
     app.get('/file/:id', async (req, res) => {
@@ -54,7 +52,6 @@ async function startServer() {
             
             const form = new FormData();
             form.append('file', req.file.buffer, { filename: req.file.originalname });
-            // The frontend still communicates with the backend at localhost:8000
             const response = await axios.post('http://localhost:8000/summarize/', form, { headers: form.getHeaders() });
             const summaryData = response.data;
 
@@ -69,7 +66,8 @@ async function startServer() {
                 summary: newAnalysis.summaryText,
                 fileId: newAnalysis.gridFsId,
                 fileMimeType: req.file.mimetype,
-                fileName: req.file.originalname
+                fileName: req.file.originalname,
+                sessionId: summaryData.sessionId // <-- This line is added
             });
         } catch (error) {
             console.error('Error during analysis:', error.response ? error.response.data : error.message);
